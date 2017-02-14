@@ -37,7 +37,7 @@ public class TestWindow extends SJCC {
       System.out.println("Space just pressed!");
     }
     if (mousePressed()) {
-      if (mouseKey() == MouseEvent.BUTTON1) {
+      if (mouseButton() == MouseEvent.BUTTON1) {
         System.out.println("Left mouse button pressed at" + 
         clickMousePos().x + ", " + clickMousePos().y);
       }
