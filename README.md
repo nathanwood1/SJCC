@@ -11,7 +11,12 @@ It is _**really, really**_ lightweight.
 I don't mind if you don't give credit for using this.
 ## How do you use it?
 ```java
-//Excluding imports for simplicity
+import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+
+import sjcc.SJCC;
+
 public class TestWindow extends SJCC {
   
   public static void main(String[] args) {
