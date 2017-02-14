@@ -134,6 +134,7 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
                 }
                 Graphics2D g = (Graphics2D) bs.getDrawGraphics();
                 g.setColor(Color.BLACK);
+                g.fillRect(0, 0, WIDTH, HEIGHT);
                 cuMP = null;
                 render(g, delta);
                 g.dispose();
