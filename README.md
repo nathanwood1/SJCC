@@ -36,7 +36,7 @@ public class TestWindow extends SJCC {
     if (getKey(KeyEvent.VK_SPACE) == 0) {
       System.out.println("Space just pressed!");
     }
-    if (mouseDown()) {
+    if (mousePressed()) {
       if (mouseKey() == MouseEvent.BUTTON1) {
         System.out.println("Left mouse button pressed at" + 
         clickMousePos().x + ", " + clickMousePos().y);
@@ -47,7 +47,7 @@ public class TestWindow extends SJCC {
 }
 ```
 #### Things to note with mouse
-clickMousePos() returns the position of a mouse click, whilst currentMousePos() returns the current position of a mouse click.
+clickMousePos() returns the position of a mouse click, whilst currentMousePos() returns the current position of a mouse click. mousePressed() returns true if it was *just* clicked and mouseDown() returns ture if the mouse is down.
 All mouse positions are realative to the canvas.
 getKey() returns a double representing the time it has been held down for.
 ## Download
