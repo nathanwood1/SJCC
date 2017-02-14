@@ -38,7 +38,7 @@ public class TestWindow extends SJCC {
     }
     if (mousePressed()) {
       if (mouseButton() == MouseEvent.BUTTON1) {
-        System.out.println("Left mouse button pressed at" + 
+        System.out.println("Left mouse button pressed at " + 
         clickMousePoint().x + ", " + clickMousePoint().y);
       }
     }
