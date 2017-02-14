@@ -70,7 +70,4 @@
     nbproject/build-impl.xml file. 
 
     -->
-    <target name="-pre-jar">
-      <javadoc sourcepath="src" destdir="apidocs"/>
-    </target>
 </project>
