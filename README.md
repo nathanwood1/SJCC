@@ -15,10 +15,10 @@ I don't mind if you don't give credit for using this.
 public class TestWindow extends SJCC {
   
   public static void main(String[] args) {
+    TestWindow t = new TestWindow();
     t.WIDTH = 800; //Example
     t.HEIGHT = 600;
     t.TITLE = "Test Window";
-    TestWindow t = new TestWindow();
     t.start();
   }
 
