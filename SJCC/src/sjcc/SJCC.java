@@ -3,6 +3,8 @@ package sjcc;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ComponentEvent;
@@ -28,6 +30,7 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
     public SJCC () {
         System.setProperty("sun.java2d.opengl", "true"); //Linux lags without this
         keys = new LinkedHashMap<>();
+        frame = new JFrame();
     }
     
     /**
@@ -69,11 +72,17 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
     public int ON_CLOSE = JFrame.EXIT_ON_CLOSE;
     
     /**
+     * JFrame of the window
+     * @see JFrame
+     * @since v1.1.0
+     */
+    public final JFrame frame;
+    
+    /**
      * Starts the window with parameters
      * @since v1.0.0
      */
     public void start() {
-        final JFrame frame = new JFrame();
         frame.setTitle(TITLE);
         frame.setSize(WIDTH, HEIGHT);
         if (POSITION == null)
@@ -162,6 +171,38 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
      * @since v1.0.0
      */
     public abstract void render(Graphics2D g, double delta);
+    
+    private boolean fullScreen = false;
+    
+    /**
+     * Toggles full screen of the window
+     * @since v1.1.0
+     */
+    public void toggleFullScreen() {
+        if (fullScreen) {
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            GraphicsDevice gd = ge.getScreenDevices()[0];
+            gd.setFullScreenWindow(null);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+            }
+            frame.setVisible(true);
+            frame.setExtendedState(JFrame.NORMAL);
+            frame.setSize(800, 600);
+            frame.setLocationRelativeTo(null);
+            WIDTH = 800;
+            HEIGHT = 600;
+            fullScreen = false;
+        } else {
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            GraphicsDevice gd = ge.getScreenDevices()[0];
+            if (gd.isFullScreenSupported()) {
+                gd.setFullScreenWindow(frame);
+            }
+            fullScreen = true;
+        }
+    }
     
     /**
      * Get how long (in seconds) a key has been held down for
