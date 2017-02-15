@@ -353,6 +353,7 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
     public void mousePressed(MouseEvent e) {
         mState = MouseDownState.LISTENER_JUST_PRESSED;
         mouseBtn = e.getButton();
+        clickMousePoint();
     }
 
     @Override
