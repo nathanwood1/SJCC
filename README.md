@@ -1,5 +1,7 @@
 # SJCC
 Simple Java Canvas Controls
+## Download
+Latest release can be found [here](https://github.com/thatnat/SJCC/releases/tag/v1.0.0)
 ## What is it?
 SJCC is a simple one-class library for creating a render method, along with all you'll need for inputs:  
 - Keyboard
@@ -50,5 +52,3 @@ public class TestWindow extends SJCC {
 clickMousePoint() returns the position of a mouse click, whilst currentMousePoint() returns the current position of a mouse click. mousePressed() returns true if it was *just* clicked and mouseDown() returns ture if the mouse is down.
 All mouse positions are realative to the canvas.
 getKey() returns a double representing the time it has been held down for.
-## Download
-_**No** current releases._ **Please wait**
