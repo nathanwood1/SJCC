@@ -22,78 +22,97 @@ import static javax.swing.SwingUtilities.convertPointFromScreen;
 
 /**
  * Main class that creates and maintains a window
+ *
  * @author nathan
  * @since v1.0.0
  */
 public abstract class SJCC extends Canvas implements Runnable, KeyListener, MouseListener, MouseWheelListener {
-    
-    public SJCC () {
+
+    public SJCC() {
         System.setProperty("sun.java2d.opengl", "true"); //Linux lags without this
         keys = new LinkedHashMap<>();
         frame = new JFrame();
     }
-    
+
     /**
      * Sets the width of the window
+     *
      * @since v1.0.0
      */
     public int WIDTH = -1;
-    
+
     /**
      * Sets the height of the window
+     *
      * @since v1.0.0
      */
     public int HEIGHT = -1;
-    
+
     /**
      * Sets the title of the window
+     *
      * @since v1.0.0
      */
     public String TITLE = null;
-    
+
     /**
-     * Sets position of the window.
-     * If null, it will put it in the centre of the screen
+     * Sets position of the window. If null, it will put it in the centre of the
+     * screen
+     *
      * @since v1.0.0
      */
     public Point POSITION = null;
-    
+
     /**
      * Sets whether the user should be able to resize the window
+     *
      * @since v1.0.0
      */
     public boolean RESIZEABLE = false;
-    
+
     /**
      * Decides what should happen when the user closes the window
+     *
      * @see JFrame
      * @since v1.0.0
      */
     public int ON_CLOSE = JFrame.EXIT_ON_CLOSE;
-    
+
+    /**
+     * Decides if fullsceen should be enabled
+     *
+     * @since v1.1.0
+     */
+    public boolean FULLSCREEN = false;
+
     /**
      * JFrame of the window
+     *
      * @see JFrame
      * @since v1.1.0
      */
     public final JFrame frame;
-    
+
     /**
      * Starts the window with parameters
+     *
      * @since v1.0.0
      */
     public void start() {
         frame.setTitle(TITLE);
         frame.setSize(WIDTH, HEIGHT);
-        if (POSITION == null)
+        origWIDTH = WIDTH;
+        origHEIGHT = HEIGHT;
+        if (POSITION == null) {
             frame.setLocationRelativeTo(null);
-        else
+        } else {
             frame.setLocation(POSITION);
+        }
         frame.setResizable(RESIZEABLE);
         frame.setDefaultCloseOperation(ON_CLOSE);
 
         frame.add(this);
-        
+
         frame.addKeyListener(this);
         frame.addMouseListener(this);
         frame.addMouseWheelListener(this);
@@ -106,25 +125,29 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
 
             @Override
             public void componentMoved(ComponentEvent e) {
-                
+
             }
 
             @Override
             public void componentShown(ComponentEvent e) {
-                
+
             }
 
             @Override
             public void componentHidden(ComponentEvent e) {
-                
+
             }
         });
         this.addKeyListener(this);
         this.addMouseListener(this);
         this.addMouseWheelListener(this);
-        
+
         frame.setVisible(true);
-        
+
+        if (FULLSCREEN) {
+            toggleFullScreen();
+        }
+
         run();
     }
 
@@ -150,36 +173,42 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
                 bs.show();
                 synchronized (keys) {
                     keys.keySet().stream().forEach((Integer key) -> {
-                        if (keys.get(key) == -1)
+                        if (keys.get(key) == -1) {
                             keys.put(key, 0d);
-                        else
+                        } else {
                             keys.put(key, keys.get(key) + delta);
+                        }
                     });
                 }
-                if (mState == MouseDownState.LISTENER_JUST_PRESSED)
+                if (mState == MouseDownState.LISTENER_JUST_PRESSED) {
                     mState = MouseDownState.JUST_PRESSED;
-                else if (mState == MouseDownState.JUST_PRESSED)
+                } else if (mState == MouseDownState.JUST_PRESSED) {
                     mState = MouseDownState.PRESSED;
+                }
             }
         }
     }
-    
+
     /**
      * This method is run for every frame rendered
+     *
      * @param g Graphics object for drawing
      * @param delta Time (in seconds) since last frame
      * @since v1.0.0
      */
     public abstract void render(Graphics2D g, double delta);
-    
-    private boolean fullScreen = false;
-    
+
+    private boolean fullscreen = false;
+
+    private int origWIDTH, origHEIGHT;
+
     /**
      * Toggles full screen of the window
+     *
      * @since v1.1.0
      */
     public void toggleFullScreen() {
-        if (fullScreen) {
+        if (fullscreen) {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             GraphicsDevice gd = ge.getScreenDevices()[0];
             gd.setFullScreenWindow(null);
@@ -187,28 +216,29 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
             }
-            frame.setVisible(true);
             frame.setExtendedState(JFrame.NORMAL);
-            frame.setSize(800, 600);
+            frame.setSize(origWIDTH, origHEIGHT);
             frame.setLocationRelativeTo(null);
-            WIDTH = 800;
-            HEIGHT = 600;
-            fullScreen = false;
+            frame.setResizable(RESIZEABLE);
+            fullscreen = false;
         } else {
+            frame.setResizable(true);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             GraphicsDevice gd = ge.getScreenDevices()[0];
             if (gd.isFullScreenSupported()) {
                 gd.setFullScreenWindow(frame);
             }
-            fullScreen = true;
+            fullscreen = true;
         }
     }
-    
+
     /**
      * Get how long (in seconds) a key has been held down for
+     *
      * @param keyCode Code of the key
      * @see KeyEvent
-     * @return Returns how long that key has been pushed down<br>Will return -1 if the key is not being held down
+     * @return Returns how long that key has been pushed down<br>Will return -1
+     * if the key is not being held down
      * @since v1.0.0
      */
     public double getKey(int keyCode) {
@@ -217,18 +247,20 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
                 if (keys.get(keyCode) == -1) {
                     keys.put(keyCode, 0d);
                     return 0;
-                } else
+                } else {
                     return keys.get(keyCode);
-            } else
+                }
+            } else {
                 return -1;
+            }
         }
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-        
+
     }
-    
+
     private final LinkedHashMap<Integer, Double> keys;
 
     @Override
@@ -247,14 +279,15 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        
+
     }
-    
+
     private Point cuMP = null;
     private Point clMP = null;
-    
+
     /**
      * Gives the position of the mouse relative to the canvas
+     *
      * @return Returns mouse point
      * @since v1.0.0
      */
@@ -265,9 +298,10 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
         }
         return cuMP;
     }
-    
+
     /**
      * Gives the position of the mouse relative to the canvas
+     *
      * @return Returns mouse point
      * @since v1.0.0
      */
@@ -277,37 +311,40 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
         }
         return clMP;
     }
-    
+
     private enum MouseDownState {
         LISTENER_JUST_PRESSED,
         JUST_PRESSED,
         PRESSED,
         NOT_PRESSED;
     }
-    
+
     private MouseDownState mState = MouseDownState.NOT_PRESSED;
     private int mouseBtn = -1;
-    
+
     /**
      * Returns if the mouse was just pressed
+     *
      * @return Returns if the mouse was just pressed
      * @since v1.0.0
      */
     public boolean mousePressed() {
-        if (mState == MouseDownState.LISTENER_JUST_PRESSED)
+        if (mState == MouseDownState.LISTENER_JUST_PRESSED) {
             mState = MouseDownState.JUST_PRESSED;
+        }
         return mState == MouseDownState.JUST_PRESSED;
     }
-    
+
     /**
      * Returns if the mouse is down
+     *
      * @return Returns if the mouse is down
      * @since v1.0.0
      */
     public boolean mouseDown() {
         return mState != MouseDownState.NOT_PRESSED;
     }
-    
+
     public int mouseButton() {
         return mouseBtn;
     }
@@ -326,22 +363,22 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        
+
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        
+
     }
-    
+
     private int mWheel = 0;
-    
+
     public int getMouseWheel() {
         int r = mWheel;
         mWheel = 0;
         return r;
     }
-    
+
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         mWheel = e.getScrollAmount();
