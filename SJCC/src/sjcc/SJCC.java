@@ -231,7 +231,10 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
      * @since v1.0.0
      */
     public Point clickMousePoint() {
-        return clMP == null ? currentMousePoint() : clMP;
+        if (clMP == null) {
+            clMP = currentMousePoint();
+        }
+        return clMP;
     }
     
     private enum MouseDownState {
@@ -252,7 +255,6 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
     public boolean mousePressed() {
         if (mState == MouseDownState.LISTENER_JUST_PRESSED)
             mState = MouseDownState.JUST_PRESSED;
-        clMP = currentMousePoint();
         return mState == MouseDownState.JUST_PRESSED;
     }
     
@@ -278,6 +280,7 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
     @Override
     public void mouseReleased(MouseEvent e) {
         mState = MouseDownState.NOT_PRESSED;
+        clMP = null;
     }
 
     @Override
