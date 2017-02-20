@@ -29,7 +29,6 @@ import static javax.swing.SwingUtilities.convertPointFromScreen;
 public abstract class SJCC extends Canvas implements Runnable, KeyListener, MouseListener, MouseWheelListener {
 
     public SJCC() {
-        System.setProperty("sun.java2d.opengl", "true"); //Linux lags without this
         keys = new LinkedHashMap<>();
         frame = new JFrame();
     }
