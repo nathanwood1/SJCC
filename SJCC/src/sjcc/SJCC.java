@@ -389,6 +389,11 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
 
     private int mWheel = 0;
 
+    /**
+     * Returns scroll units and sets it to zero
+     * @return Gives the scroll units
+     * @since v1.0.0
+     */
     public int getMouseWheel() {
         int r = mWheel;
         mWheel = 0;
