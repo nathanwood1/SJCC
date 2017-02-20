@@ -99,6 +99,9 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
      * @since v1.0.0
      */
     public void start() {
+        if (running)
+            return;
+        running = true;
         frame.setTitle(TITLE);
         frame.setSize(WIDTH, HEIGHT);
         origWIDTH = WIDTH;
@@ -150,11 +153,24 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
 
         run();
     }
+    
+    /**
+     * Stops and closes the window
+     * @since v1.2.0
+     */
+    public void stop() {
+        if (!running)
+            return;
+        running = false;
+        frame.dispose();
+    }
+    
+    private boolean running = false;
 
     @Override
     public void run() {
         long prev = System.nanoTime();
-        while (true) {
+        while (running) {
             long now = System.nanoTime();
             double delta = (now - prev) / 1E9;
             prev = now;
