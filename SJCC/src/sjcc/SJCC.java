@@ -397,6 +397,6 @@ public abstract class SJCC extends Canvas implements Runnable, KeyListener, Mous
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        mWheel = e.getScrollAmount();
+        mWheel = e.getUnitsToScroll();
     }
 }
